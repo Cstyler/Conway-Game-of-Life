@@ -56,7 +56,8 @@ class Snake(object):
         self.body.append(head)
         if head == self.food:
             self.food_exist = True
-        self.body = self.body[0 if head == self.food else 1:len(self.body)]
+        else:
+            self.body = self.body[1:len(self.body)]
         self.timer = Timer(0.1, lambda: self.move(next_coord))
         self.timer.start()
     def stop(self):
