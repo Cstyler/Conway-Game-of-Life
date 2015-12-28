@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from tkinter import Tk, Button, Frame, Label, Menu, NORMAL, HIDDEN, BOTH
+from tkinter import Tk, Button, Frame, Label, Menu
 from threading import Timer
 from random import randint, choice
 from itertools import product
@@ -15,10 +15,10 @@ class Snake(object):
         self.is_running = False
         self.product = list(product(range(0, self.board.board_width), range(0, self.board.board_height)))
         self.food = self.board.matrix[randint(0, self.board.board_width-1)][randint(0, self.board.board_height-1)]
-        self.board.canv.itemconfig(self.food, state = NORMAL, fill = 'red', outline = 'red')
+        self.board.canv.itemconfig(self.food, state = 'normal', fill = 'red', outline = 'red')
     def move(self, tag):
         x, y = self.body[0]
-        self.board.canv.itemconfig(self.board.matrix[x][y], state = HIDDEN)
+        self.board.canv.itemconfig(self.board.matrix[x][y], state = 'hidden')
         x, y = self.body[len(self.body) - 1]
         if tag == 'u':
             y -= 1
@@ -39,12 +39,12 @@ class Snake(object):
         if (x, y) in self.body:
             self.stop_game()
             return
-        self.board.canv.itemconfig(head, state = NORMAL, fill = 'green', outline = 'green')
+        self.board.canv.itemconfig(head, state = 'normal', fill = 'green', outline = 'green')
         self.body.append((x, y))
         if head == self.food:
             x, y = choice(list(filter(lambda x: x not in self.body, self.product)))
             self.food = self.board.matrix[x][y]
-            self.board.canv.itemconfig(self.food, state = NORMAL, fill = 'red', outline = 'red')
+            self.board.canv.itemconfig(self.food, state = 'normal', fill = 'red', outline = 'red')
         else:
             self.body = self.body[1:len(self.body)]
         self.is_running = True
@@ -84,6 +84,7 @@ def main():
     root.geometry("%dx%d+500+0" % (win_width+58, win_height+5))
     frame = Frame(root, bd = 2, bg = 'black')
     board = Board(frame, cell_size, win_height, win_width, cell_distance)
+    board.set_binding(board.draw_cell)
     snake = Snake(board)
     menubar = Menu(root)
     levelmenu = Menu(menubar, tearoff=0)
@@ -99,7 +100,7 @@ def main():
     root.bind('<Up>', lambda x: move(snake, 'u'))
     btn1.pack(side = 'right')
     frame.pack()
-    board.canv.pack(fill= BOTH)
+    board.canv.pack(fill= 'both')
     root.title('Snake')
     root.mainloop()
 

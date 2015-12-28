@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from Tkinter import Tk, Button, Frame, Canvas, Label, Menu, NORMAL, HIDDEN, BOTH
+from Tkinter import Tk, Button, Frame, Canvas, Label, Menu
 from numpy import zeros, int16
 from threading import Timer
 from random import randint, choice
@@ -21,7 +21,7 @@ class Board(object):
             for y in xrange(self.board_height):
                 self.matrix[x][y] = self.canv.create_rectangle(x*cell_size+cell_distance, \
                 y*cell_size+cell_distance, (x+1)*cell_size-cell_distance, \
-                (y+1)*cell_size-cell_distance, state = HIDDEN, fill = 'green', outline = 'green', tags=('%d' % x, '%d' % y))
+                (y+1)*cell_size-cell_distance, state = 'hidden', fill = 'green', outline = 'green', tags=('%d' % x, '%d' % y))
 
     def draw_cell(self,event):
         """Make cells visible by clicking on left mouse button."""
@@ -30,7 +30,7 @@ class Board(object):
             y = (event.y-self.cell_distance)/self.cell_size
             if (x, y) not in self.visible_cells:
                 self.visible_cells.append((x,y))
-            self.canv.itemconfig(self.matrix[x][y], state = NORMAL)
+            self.canv.itemconfig(self.matrix[x][y], state = 'normal')
         except IndexError:
             pass
 
@@ -44,10 +44,10 @@ class Snake(object):
         self.is_running = False
         self.product = list(product(xrange(0, self.board.board_width), xrange(0, self.board.board_height)))
         self.food = self.board.matrix[randint(0, self.board.board_width-1)][randint(0, self.board.board_height-1)]
-        self.board.canv.itemconfig(self.food, state = NORMAL, fill = 'red', outline = 'red')
+        self.board.canv.itemconfig(self.food, state = 'normal', fill = 'red', outline = 'red')
     def move(self, tag):
         x, y = self.body[0]
-        self.board.canv.itemconfig(self.board.matrix[x][y], state = HIDDEN)
+        self.board.canv.itemconfig(self.board.matrix[x][y], state = 'hidden')
         x, y = self.body[len(self.body) - 1]
         if tag == 'u':
             y -= 1
@@ -68,12 +68,12 @@ class Snake(object):
         if (x, y) in self.body:
             self.stop_game()
             return
-        self.board.canv.itemconfig(head, state = NORMAL, fill = 'green', outline = 'green')
+        self.board.canv.itemconfig(head, state = 'normal', fill = 'green', outline = 'green')
         self.body.append((x, y))
         if head == self.food:
             x, y = choice(filter(lambda x: x not in self.body, self.product))
             self.food = self.board.matrix[x][y]
-            self.board.canv.itemconfig(self.food, state = NORMAL, fill = 'red', outline = 'red')
+            self.board.canv.itemconfig(self.food, state = 'normal', fill = 'red', outline = 'red')
         else:
             self.body = self.body[1:len(self.body)]
         self.is_running = True
@@ -128,7 +128,7 @@ def main():
     root.bind('<Up>', lambda x: move(snake, 'u'))
     btn1.pack(side = 'right')
     frame.pack()
-    board.canv.pack(fill= BOTH)
+    board.canv.pack(fill= 'both')
     root.title('Snake')
     root.mainloop()
 

@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 from board import Board
-from tkinter import Tk, Button, Frame, Label, Menu, NORMAL, HIDDEN
+from tkinter import Tk, Button, Frame
 from itertools import product, chain
 from threading import Timer
 
 def neighbors(point):
+    """Calc neighbors of point (x, y) """
     x, y = point
     for i, j  in product(range(-1,2), repeat = 2):
         if any((i, j)):
@@ -12,6 +13,7 @@ def neighbors(point):
                 yield (x + i, y + j)
 
 class Life:
+    """Make next generation, repeat it and stop"""
     def __init__(self, body, repeat_time = 0.1):
         self.body = body
         self.timer = None
@@ -45,9 +47,11 @@ def main():
     root.geometry("%dx%d+500+0" % (win_width+5, win_height+34))
     frame = Frame(root, bd = 2, bg = 'black')
     board = Board(frame, cell_size, win_height, win_width, cell_distance)
+    board.set_binding(board.draw_cell)
     life = Life(board.visible_cells, 0.1)
     btn1 = Button(frame, text = 'Start', command = lambda: life.repaint(board))
     btn2 = Button(frame, text = 'Restart', command = lambda: Restart(board, life))
+
     board.canv.pack(fill = 'both')
     btn1.pack(side = 'left')
     btn2.pack(side = 'right')
